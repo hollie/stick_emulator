@@ -1,0 +1,4 @@
+This is a small piece of Perl code that emulates the basic behaviour of a Plugwise Stick.
+
+It is used to verify the correct behaviour of the xpl-plugwise code I'm developing for the xpl-perl framework of beanz.
+

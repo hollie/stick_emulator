@@ -25,7 +25,7 @@ my $framecount=0;
 
 # Try starting the server
 die "can't setup server" unless $server;
-print "[Server $0 accepting clients...]\n";
+print "[Server $0 accepting clients on port $server_port...]\n";
 
 # Main program loop, only one client at a time
 while ($client = $server->accept()) {
@@ -59,9 +59,10 @@ while ($client = $server->accept()) {
             my $rescode = $2 eq "00" ? "00DE" : "00D8";
             sleep 1;
             print $client plugwise_respond("0000", $rescode . $1);
-            if ($framecount == 5) {
-                #send double response for testing
+            if ($framecount % 5 == 0) {
+                #send triple response for testing every 5 packets
                 print $client plugwise_respond("0000", $rescode . $1);
+		print $client plugwise_respond("0000", $rescode . $1);
             }
 
             next;

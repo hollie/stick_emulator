@@ -68,6 +68,24 @@ while ($client = $server->accept()) {
             next;
         }
 
+        if ($frame =~ /^0018([[:xdigit:]]{16})([[:xdigit:]]{2})/) {
+            # Role call
+            print $client plugwise_ack();
+            # Simulate that we only have a single circle connected to the circle+
+            # For others reply with FFF..FF
+            my $rescode = $2 eq "00" ? "000D6F0000B1B967" : "FFFFFFFFFFFFFFFF";
+            print $client plugwise_respond("0019", $1 . $rescode . $2);
+            next;
+        }
+
+        if ($frame =~ /^0026([[:xdigit:]]{16})/) {
+            # Respond to calibration request
+            print $client plugwise_ack();
+            my $rescode = $1 . "3F78BD69" . "B6FF0876" . "3CA99962" . "00000000";
+            print $client plugwise_respond("0027", $rescode);
+            next;
+        }
+
         print "Oops: unknown message $frame\n";
 
     }

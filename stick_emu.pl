@@ -78,6 +78,14 @@ while ($client = $server->accept()) {
             next;
         }
 
+        if ($frame =~ /^0023([[:xdigit:]]{16})/) {
+            # Respond to status request
+            print $client plugwise_ack();
+            my $rescode = $1 . "3F78BD69" . "B6FF0876" . "00";
+            print $client plugwise_respond("0024", $rescode);
+            next;
+        }
+
         if ($frame =~ /^0026([[:xdigit:]]{16})/) {
             # Respond to calibration request
             print $client plugwise_ack();
